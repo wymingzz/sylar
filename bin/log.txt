@@ -1,0 +1,4 @@
+2023-09-18 23:21:05	ERROR	test macro error
+2023-09-18 23:21:05	ERROR	test macro fmt error aa
+2023-09-18 23:21:05	FATAL	test macro fmt fatal this is fatal
+2023-09-18 23:21:05	FATAL	xxxxxxx
