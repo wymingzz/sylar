@@ -1,6 +1,7 @@
 #ifndef __SYLAR_CONFIG_H__
 #define __SYLAR_CONFIG_H__
 
+#include <yaml-cpp/yaml.h>
 #include <boost/lexical_cast.hpp>
 #include <string>
 #include <memory>
@@ -18,7 +19,10 @@ namespace sylar
 
         ConfigVarBase(const std::string &name, const std::string &description = "")
             : m_name(name),
-              m_description(description) {}
+              m_description(description)
+        {
+            std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower); // 将大写字母转化成小写
+        }
 
         virtual ~ConfigVarBase() {}
 
@@ -90,8 +94,8 @@ namespace sylar
         template <class T>
         static typename ConfigVar<T>::ptr Lookup(const std::string name)
         {
-            auto it = m_datas.find(name);
-            if (it == m_datas.end())
+            auto it = s_datas.find(name);
+            if (it == s_datas.end())
             {
                 return nullptr;
             }
@@ -110,19 +114,23 @@ namespace sylar
                 return tmp;
             }
 
-            if (name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._0123456789") != std::string::npos)
+            if (name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._0123456789") != std::string::npos)
             {
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << name;
                 throw std::invalid_argument(name);
             }
 
             typename ConfigVar<T>::ptr v(new ConfigVar<T>(name, default_value, description));
-            m_datas[name] = v;
+            s_datas[name] = v;
             return v;
         }
 
+        static ConfigVarBase::ptr LookupBase(const std::string &name);
+
+        static void LoadFromYaml(const YAML::Node &root);
+
     private:
-        static ConfigVarMap m_datas;
+        static ConfigVarMap s_datas;
     };
 
 }

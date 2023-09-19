@@ -45,15 +45,24 @@ void test_yaml()
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root;
 }
 
+void test_config()
+{
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_int_value_config->getValue();
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_float_value_config->toString();
+
+    YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/log.yml");
+    sylar::Config::LoadFromYaml(root);
+
+
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_int_value_config->getValue();
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_float_value_config->toString();
+}
+
 int main(int argc, char const *argv[])
 {
-    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_int_value_config->getValue();
-    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_int_value_config->toString();
+    // test_yaml();
 
-    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_float_value_config->getValue();
-    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_float_value_config->toString();
-
-    test_yaml();
+    test_config();
 
     return 0;
 }

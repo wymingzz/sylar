@@ -35,11 +35,13 @@ tests -- 测试代码路径
 
 Config --> Yaml
 
+### yaml库的安装
+
 使用[yaml-cpp](https://github.com/jbeder/yaml-cpp/releases/tag/0.8.0)(Yaml库)
 
 进入yaml-cpp目录：
 
-```
+```shell
 mkdir build
 cd build
 cmake ..
@@ -47,6 +49,34 @@ make install
 ```
 
 安装好的`include`默认在`/usr/local/include`中
+
+### yaml-cpp的使用
+
+加载yaml文件
+
+```cpp
+YAML::Node root = YAML::LoadFile(your_yaml_file_path);
+```
+
+yaml文件内容的遍历(yaml数据的三种类型)
+
+```cpp
+// map结构的yaml，使用node.IsMap()判断
+for(auto it = node.begin(); it != node.end(); ++ it) {
+    // map节点中的结构
+    // it->first std::string
+    // it->second YAML::Node
+}
+
+// sequence结构的yaml，使用node.IsSequence()判断
+for (size_t i = 0; i < node.size(); ++ i) {
+
+}
+
+// 简单类型的yaml，使用node.IsScalar()判断
+// 可直接使用node.Scalar()输出
+```
+
 
 ## 协程库封装
 
