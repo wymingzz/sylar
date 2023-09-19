@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
-#include "../sylar/log.h"
-#include "../sylar/util.h"
+#include "log/log.h"
+#include "log/util.h"
 
 int main(int argc, char const *argv[])
 {

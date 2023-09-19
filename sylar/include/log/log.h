@@ -2,9 +2,9 @@
 #define __SYLAR_LOG_H__
 
 #include "singleton.h"
+#include "log/util.h"
 #include <string>
 #include <stdint.h>
-#include <memory>
 #include <list>
 #include <sstream>
 #include <fstream>
@@ -39,6 +39,8 @@
 #define SYLAR_LOG_FMT_WARN(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::WARN, fmt, __VA_ARGS__)
 #define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::ERROR, fmt, __VA_ARGS__)
 #define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::FATAL, fmt, __VA_ARGS__)
+
+#define SYLAR_LOG_ROOT() sylar::LoggerMgr::GetInstance()->getRoot()
 
 namespace sylar
 {
@@ -360,6 +362,7 @@ namespace sylar
         Logger::ptr getLogger(const std::string &name);
 
         void init();
+        Logger::ptr getRoot() const { return m_root; }
 
     private:
         std::map<std::string, Logger::ptr> m_loggers;

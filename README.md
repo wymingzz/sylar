@@ -23,17 +23,17 @@ sylar -- 源代码路径
 tests -- 测试代码路径
 
 ## 日志系统
-1. Log4j
-    Logger(日志类别)
+1. Log4j(日志格式)
 
-&emsp;&emsp;    |
+        Logger(日志类别)
+            |
+            |--------Fromatter(日志格式)
+            |
+        Appender(日志输出)
 
-&emsp;&emsp;    |--------Fromatter(日志格式)
+## 配置系统
 
-&emsp;&emsp;    |
-
-    Appender(日志输出)
-
+Config --> Yaml
 
 ## 协程库封装
 
