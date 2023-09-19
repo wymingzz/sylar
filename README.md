@@ -37,7 +37,7 @@ Config --> Yaml
 
 ### yaml库的安装
 
-使用[yaml-cpp](https://github.com/jbeder/yaml-cpp/releases/tag/0.8.0)(Yaml库)
+使用[yaml-cpp](https://github.com/jbeder/yaml-cpp/releases)(Yaml库)
 
 进入yaml-cpp目录：
 
@@ -77,6 +77,23 @@ for (size_t i = 0; i < node.size(); ++ i) {
 // 可直接使用node.Scalar()输出
 ```
 
+**配置系统的原则：约定优于配置**
+
+由于之前使用`boost`库中的转换只能在普通类型之间
+
+若想支持复杂类型(`std::vector`、`std::set`等容器)与`std::string`之间的转换，需要进行容器特化
+
+```cpp
+// T FromStr()(const std::string) 将std::string转换成特定类型
+// std::string ToStr()(const T) 将T类型转换成std::string
+template<T, FromStr, ToStr>
+class ConfigVar;
+
+
+// 通用转换模式，支持容器片特化，目前支持vector
+template<F, T>
+class LexicalCast;
+```
 
 ## 协程库封装
 
