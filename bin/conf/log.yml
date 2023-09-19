@@ -1,0 +1,15 @@
+logs:
+  - name: root
+    level: info
+    formatter: '%d\t%m%n'
+    appender:
+      - type: FileLogAppender
+        path: log.txt
+      - type: StdoutLogAppender
+  - name: system
+    level: debug
+    formatter: '%d\t%m%n'
+    appender:
+      - type: FileLogAppender
+        path: log.txt
+      - type: StdoutLogAppender

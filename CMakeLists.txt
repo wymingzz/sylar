@@ -10,7 +10,11 @@ set(LIB_SRC
     sylar/config/config.cc
     )
 
-include_directories("${PROJECT_SOURCE_DIR}/sylar/include")
+include_directories(${PROJECT_SOURCE_DIR}/sylar/include)
+include_directories(/usr/local/include)
+# link_directories(/usr/local/lib)
+
+# find_library(YAMLCPP libyaml-cpp.a)
 
 add_library(sylar SHARED ${LIB_SRC})
 #add_library(sylar_static STATIC ${LIB_SRC})
@@ -22,7 +26,7 @@ target_link_libraries(test sylar)
 
 add_executable(test_config tests/test_config.cc)
 add_dependencies(test_config sylar)
-target_link_libraries(test_config sylar)
+target_link_libraries(test_config sylar -L/usr/local/lib -lyaml-cpp)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

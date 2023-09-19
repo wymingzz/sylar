@@ -35,6 +35,19 @@ tests -- 测试代码路径
 
 Config --> Yaml
 
+使用[yaml-cpp](https://github.com/jbeder/yaml-cpp/releases/tag/0.8.0)(Yaml库)
+
+进入yaml-cpp目录：
+
+```
+mkdir build
+cd build
+cmake ..
+make install
+```
+
+安装好的`include`默认在`/usr/local/include`中
+
 ## 协程库封装
 
 ## socket函数库
