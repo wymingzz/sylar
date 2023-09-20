@@ -25,6 +25,21 @@ tests -- 测试代码路径
 ## 日志系统
 1. Log4j(日志格式)
 
+```shell
+# 当前已实现的日志输出格式
+%m - 日志内容
+%p - 日志等级
+%r - 程序启动开始到现在的毫秒数
+%c - 日志名称
+%t - 线程id
+%n - 换行
+%d - 日期和时间
+%f - 文件名
+%l - 行号
+%F - 协程id
+```
+
+
         Logger(日志类别)
             |
             |--------Fromatter(日志格式)
@@ -90,7 +105,9 @@ template<T, FromStr, ToStr>
 class ConfigVar;
 
 
-// 通用转换模式，支持容器片特化，目前支持vector
+// 通用转换模式，支持容器片特化，目前支持vector<T>, list<T>,
+// set<T>, unordered_set<T>,
+// map<std::string, T>, unordered_map<std::string, T>
 template<F, T>
 class LexicalCast;
 ```
