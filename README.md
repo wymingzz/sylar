@@ -92,6 +92,8 @@ for (size_t i = 0; i < node.size(); ++ i) {
 // 可直接使用node.Scalar()输出
 ```
 
+### 配置系统的约定
+
 **配置系统的原则：约定优于配置**
 
 由于之前使用`boost`库中的转换只能在普通类型之间
@@ -110,6 +112,31 @@ class ConfigVar;
 // map<std::string, T>, unordered_map<std::string, T>
 template<F, T>
 class LexicalCast;
+```
+
+#### 自定义类型
+
+若想在配置系统中使用自定义类型，需要实现`sylar::LexicalCast`的片特化设置，实现后就可以支持`Config`解析自定义类型，并且自定义类型可以和常规`stl`容器一起使用
+
+下面是一个模板示例：
+
+```cpp
+namespace sylar
+{
+    template <>
+    class LexicalCast<std::string, your_class>
+    {
+    public:
+        your_class operator()(const std::string &v){}
+    };
+
+    template <>
+    class LexicalCast<your_class, std::string>
+    {
+    public:
+        std::string operator()(const your_class &v){}
+    };
+}
 ```
 
 ## 协程库封装
