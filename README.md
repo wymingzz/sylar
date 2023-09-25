@@ -118,9 +118,23 @@ class LexicalCast;
 
 若想在配置系统中使用自定义类型，需要实现`sylar::LexicalCast`的片特化设置，实现后就可以支持`Config`解析自定义类型，并且自定义类型可以和常规`stl`容器一起使用
 
+为了使得后续的变更事件机制可以正常运行，还需要将自定义类型的`==`进行重载
+
+变更事件机制：
+
+当一个配置项修改的时候可以反向通知对应的代码(回调)
+
 下面是一个模板示例：
 
 ```cpp
+class your_class{
+    ...
+    bool operator==(const your_class &oth) const
+    {
+        ...
+    }
+}
+
 namespace sylar
 {
     template <>

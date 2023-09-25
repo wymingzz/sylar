@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <list>
+#include <functional>
 
 namespace sylar
 {
@@ -279,6 +280,7 @@ namespace sylar
     {
     public:
         typedef std::shared_ptr<ConfigVar> ptr;
+        typedef std::function<void(const T &old_val, const T &new_val)> on_change_cb;
 
         ConfigVar(const std::string &name,
                   const T &default_value, const std::string &description = "")
@@ -286,7 +288,20 @@ namespace sylar
               m_val(default_value) {}
 
         const T getValue() const { return m_val; }
-        void setValue(const T &v) { m_val = v; }
+
+        void setValue(const T &v)
+        {
+            if (m_val == v)
+            {
+                return;
+            }
+
+            for (auto &i : m_cbs)
+            {
+                i.second(m_val, v);
+            }
+            m_val = v;
+        }
         std::string getTypeName() const override { return typeid(T).name(); }
 
         std::string toString() override
@@ -320,8 +335,31 @@ namespace sylar
             return false;
         }
 
+        void addListener(uint64_t key, on_change_cb cb)
+        {
+            m_cbs[key] = cb;
+        }
+
+        void delListener(uint64_t key)
+        {
+            m_cbs.erase(key);
+        }
+
+        on_change_cb getListener(uint64_t key)
+        {
+            auto it = m_cbs.find(key);
+            return it == m_cbs.end() ? nullptr : it->second;
+        }
+
+        void clearListener()
+        {
+            m_cbs.clear();
+        }
+
     private:
         T m_val;
+
+        std::map<uint64_t, on_change_cb> m_cbs; // 变更回调函数组，uint64_t key(要求唯一，一般可以用hash)
     };
 
     class Config

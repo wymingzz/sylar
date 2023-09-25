@@ -123,6 +123,13 @@ public:
         return ss.str();
     }
 
+    bool operator==(const Person &oth) const
+    {
+        return m_name == oth.m_name &&
+               m_age == oth.m_age &&
+               m_sex == oth.m_sex;
+    }
+
     std::string m_name;
     int m_age = 0;
     bool m_sex = 0;
@@ -170,6 +177,9 @@ sylar::ConfigVar<std::map<std::string, Person>>::ptr g_person_map =
 sylar::ConfigVar<std::map<std::string, std::vector<Person>>>::ptr g_person_map_vec =
     sylar::Config::Lookup("class.person_map_vec", std::map<std::string, std::vector<Person>>(), "system person map vec");
 
+sylar::ConfigVar<std::vector<Person>>::ptr g_person_vec =
+    sylar::Config::Lookup("class.person_vec", std::vector<Person>(), "system person vec");
+
 void test_class()
 {
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_person->getValue().toString() << " - " << g_person->toString();
@@ -183,8 +193,20 @@ void test_class()
         }                                                                                               \
     }
 
-    XX_PM(g_person_map, "class.person_map before");
+#define XX(g_var, prefix)                                                    \
+    {                                                                        \
+        auto &m = g_var->getValue();                                         \
+        for (auto &i : m)                                                    \
+        {                                                                    \
+            SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << prefix ": " << i.toString(); \
+        }                                                                    \
+    }
 
+    g_person->addListener(10, [](const Person &old_val, const Person &new_val)
+                          { SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "old_val = " << old_val.toString() << " new_val = " << new_val.toString(); });
+
+    XX_PM(g_person_map, "class.person_map before");
+    XX(g_person_vec, "class.person_vec before");
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_person_map_vec->toString()
                                      << " - " << g_person_map_vec->getValue().size();
 
@@ -193,11 +215,13 @@ void test_class()
 
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
     XX_PM(g_person_map, "class.person_map after");
+    XX(g_person_vec, "class.person_vec after");
 
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person_map_vec->toString()
                                      << " - " << g_person_map_vec->getValue().size();
 
 #undef XX_MP
+#undef XX
 }
 
 int main(int argc, char const *argv[])
