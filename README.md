@@ -25,20 +25,20 @@ tests -- 测试代码路径
 ## 日志系统
 1. Log4j(日志格式)
 
-```shell
-# 当前已实现的日志输出格式
-%m - 日志内容
-%p - 日志等级
-%r - 程序启动开始到现在的毫秒数
-%c - 日志名称
-%t - 线程id
-%n - 换行
-%d - 日期和时间
-%f - 文件名
-%l - 行号
-%F - 协程id
-```
+        # 当前已实现的日志输出格式
+        %m - 日志内容
+        %p - 日志等级
+        %r - 程序启动开始到现在的毫秒数
+        %c - 日志名称
+        %t - 线程id
+        %n - 换行
+        %d - 日期和时间
+        %f - 文件名
+        %l - 行号
+        %F - 协程id
+        %T - tab缩进
 
+2. 日志结构
 
         Logger(日志类别)
             |
@@ -50,6 +50,15 @@ tests -- 测试代码路径
 
 Config --> Yaml
 
+### boost库的安装
+
+```shell
+sudo apt-get update
+sudo apt-get install libboost-all-dev
+```
+
+安装好之后，默认安装目录在`/usr/include/boost`
+
 ### yaml库的安装
 
 使用[yaml-cpp](https://github.com/jbeder/yaml-cpp/releases)(Yaml库)
@@ -60,7 +69,7 @@ Config --> Yaml
 mkdir build
 cd build
 cmake ..
-make install
+sudo make install
 ```
 
 安装好的`include`默认在`/usr/local/include`中
@@ -152,6 +161,23 @@ namespace sylar
     };
 }
 ```
+
+### 整合日志系统
+
+配置日志格式：
+
+```yaml
+logs:
+    - name: root
+      level: (debug, info, warn, error, fatal)
+      formatter: '%d%T%p%T%t:%m%n'
+      appender:
+        - type: (StdoutLogAppender, FileLogAppender)
+          level: (debug, ...)
+          file: /logs/.../xxx.log
+```
+
+定义了`LogDefine`和`LogAppenderDefine`，并添加了与之对应的片特化LexicalCast，实现日志解析
 
 ## 协程库封装
 

@@ -1,0 +1,2 @@
+2023-09-30 18:29:01	[INFO]	hello system
+2023-09-30 18:29:01	[INFO]	hello system

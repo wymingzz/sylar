@@ -371,8 +371,8 @@ namespace sylar
         template <class T>
         static typename ConfigVar<T>::ptr Lookup(const std::string name)
         {
-            auto it = s_datas.find(name);
-            if (it == s_datas.end())
+            auto it = GetDatas().find(name);
+            if (it == GetDatas().end())
             {
                 return nullptr;
             }
@@ -384,8 +384,8 @@ namespace sylar
         static typename ConfigVar<T>::ptr Lookup(const std::string name,
                                                  const T &default_value, const std::string &description = "")
         {
-            auto it = s_datas.find(name);
-            if (it != s_datas.end())
+            auto it = GetDatas().find(name);
+            if (it != GetDatas().end())
             {
                 auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
                 if (tmp)
@@ -412,7 +412,7 @@ namespace sylar
             }
 
             typename ConfigVar<T>::ptr v(new ConfigVar<T>(name, default_value, description));
-            s_datas[name] = v;
+            GetDatas()[name] = v;
             return v;
         }
 
@@ -421,7 +421,11 @@ namespace sylar
         static void LoadFromYaml(const YAML::Node &root);
 
     private:
-        static ConfigVarMap s_datas;
+        static ConfigVarMap &GetDatas()
+        {
+            static ConfigVarMap s_datas;
+            return s_datas;
+        }
     };
 
 }
