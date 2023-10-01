@@ -227,7 +227,7 @@ void test_class()
 
 void test_log()
 {
-    static sylar::Logger::ptr system_log = SYLAR_LOGG_NAME("system");
+    static sylar::Logger::ptr system_log = SYLAR_LOG_NAME("system");
     SYLAR_LOG_INFO(system_log) << "hello system" << std::endl;
     // std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
     YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/log.yml");

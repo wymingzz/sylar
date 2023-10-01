@@ -773,11 +773,11 @@ namespace sylar
                                                 auto it = old_val.find(i);
                                                 if(it == old_val.end()){
                                                     // 新增的logger(i)
-                                                    logger = SYLAR_LOGG_NAME(i.name);
+                                                    logger = SYLAR_LOG_NAME(i.name);
                                                 }else{
                                                     if(!(i == *it)){
                                                         // 修改的logger(i)
-                                                        logger = SYLAR_LOGG_NAME(i.name);
+                                                        logger = SYLAR_LOG_NAME(i.name);
                                                     }else{
                                                         continue;
                                                     }
@@ -808,7 +808,7 @@ namespace sylar
                                                 auto it = new_val.find(i);
                                                 if(it == new_val.end()){
                                                     // 删除的logger(i)
-                                                    auto logger = SYLAR_LOGG_NAME(i.name);
+                                                    auto logger = SYLAR_LOG_NAME(i.name);
                                                     logger->setLevel((LogLevel::Level)100); // 设置高级别，使得日志无法输出
                                                     logger->clearAppender();
                                                 }
