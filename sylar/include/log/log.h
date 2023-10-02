@@ -3,6 +3,7 @@
 
 #include "singleton.h"
 #include "log/util.h"
+#include "thread/thread.h"
 #include <string>
 #include <stdint.h>
 #include <list>
@@ -150,16 +151,18 @@ namespace sylar
     {
     public:
         typedef std::shared_ptr<LogAppender> ptr;
+        typedef Mutex MutexType;
+
         virtual ~LogAppender() {}
 
         virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0; // 纯虚函数
 
         virtual std::string toYamlString() = 0;
 
-        void setFormatter(LogFormatter::ptr val) { m_formatter = val; }
+        void setFormatter(LogFormatter::ptr val);
         void setFormatter(const std::string &val);
 
-        LogFormatter::ptr getFormatter() const { return m_formatter; }
+        LogFormatter::ptr getFormatter();
 
         LogLevel::Level getLevel() const { return m_level; }
         void setLevel(LogLevel::Level val) { m_level = val; }
@@ -167,6 +170,7 @@ namespace sylar
     protected:
         LogLevel::Level m_level = LogLevel::DEBUG; // 针对哪个级别的日志
         LogFormatter::ptr m_formatter;             // 输出日志格式
+        MutexType m_mutex;
     };
 
     // 日志器
@@ -176,6 +180,7 @@ namespace sylar
 
     public:
         typedef std::shared_ptr<Logger> ptr;
+        typedef Mutex MutexType;
 
         Logger(const std::string name = "root");
 
@@ -203,8 +208,9 @@ namespace sylar
         std::string toYamlString();
 
     private:
-        std::string m_name;                      // 日志名称
-        LogLevel::Level m_level;                 // 日志级别
+        std::string m_name;      // 日志名称
+        LogLevel::Level m_level; // 日志级别
+        MutexType m_mutex;
         std::list<LogAppender::ptr> m_appenders; // Appender集合
         LogFormatter::ptr m_formatter;
 
@@ -383,6 +389,7 @@ namespace sylar
     class LoggerManager
     {
     public:
+        typedef Mutex MutexType;
         LoggerManager();
         Logger::ptr getLogger(const std::string &name);
 
@@ -394,6 +401,7 @@ namespace sylar
     private:
         std::map<std::string, Logger::ptr> m_loggers;
         Logger::ptr m_root;
+        MutexType m_mutex;
     };
 
     typedef sylar::Singleton<LoggerManager> LoggerMgr;
