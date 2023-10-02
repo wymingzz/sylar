@@ -151,7 +151,7 @@ namespace sylar
     {
     public:
         typedef std::shared_ptr<LogAppender> ptr;
-        typedef Mutex MutexType;
+        typedef Spinlock MutexType;
 
         virtual ~LogAppender() {}
 
@@ -180,7 +180,7 @@ namespace sylar
 
     public:
         typedef std::shared_ptr<Logger> ptr;
-        typedef Mutex MutexType;
+        typedef Spinlock MutexType;
 
         Logger(const std::string name = "root");
 
@@ -384,12 +384,14 @@ namespace sylar
     private:
         std::string m_filename;     // 输出文件名称
         std::ofstream m_filestream; // 打开的文件流
+
+        uint64_t m_lastTime = 0; // 设置一秒reopen一次文件，防止文件被删除
     };
 
     class LoggerManager
     {
     public:
-        typedef Mutex MutexType;
+        typedef Spinlock MutexType;
         LoggerManager();
         Logger::ptr getLogger(const std::string &name);
 

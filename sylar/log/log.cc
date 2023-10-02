@@ -255,6 +255,12 @@ namespace sylar
     {
         if (level >= m_level)
         {
+            uint64_t now = time(0);
+            if (now >= (m_lastTime + 3))
+            {
+                reopen();
+                m_lastTime = now;
+            }
             MutexType::Lock lock(m_mutex);
             m_filestream << m_formatter->format(logger, level, event);
         }
@@ -286,7 +292,7 @@ namespace sylar
         {
             m_filestream.close();
         }
-        m_filestream.open(m_filename);
+        m_filestream.open(m_filename, std::ios_base::app);
         return !!m_filestream;
     }
 
