@@ -203,7 +203,7 @@ void test_class()
         }                                                                    \
     }
 
-    g_person->addListener(10, [](const Person &old_val, const Person &new_val)
+    g_person->addListener([](const Person &old_val, const Person &new_val)
                           { SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "old_val = " << old_val.toString() << " new_val = " << new_val.toString(); });
 
     XX_PM(g_person_map, "class.person_map before");
@@ -249,6 +249,12 @@ int main(int argc, char const *argv[])
     // test_class();
 
     test_log();
+
+    sylar::Config::Visit([](sylar::ConfigVarBase::ptr var)
+                         { SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "name = " << var->getName()
+                                                    << "\ndescription = " << var->getDescription()
+                                                    << "\ntypename = " << var->getTypeName()
+                                                    << "\nvalue = " << var->toString(); });
 
     return 0;
 }

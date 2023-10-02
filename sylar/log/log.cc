@@ -798,7 +798,7 @@ namespace sylar
     {
         LogIniter()
         {
-            g_log_defines->addListener(0xF1E231, [](const std::set<LogDefine> &old_val, const std::set<LogDefine> &new_val)
+            g_log_defines->addListener([](const std::set<LogDefine> &old_val, const std::set<LogDefine> &new_val)
                                        {
                                             for(auto &i:new_val){
                                                 Logger::ptr logger;
