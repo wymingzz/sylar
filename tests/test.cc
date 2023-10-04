@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
 #include "log/log.h"
-#include "log/util.h"
+#include "tools/util.h"
 
 int main(int argc, char const *argv[])
 {

@@ -1,6 +1,6 @@
 #include "thread/thread.h"
 #include "log/log.h"
-#include "log/util.h"
+#include "tools/util.h"
 
 namespace sylar
 {

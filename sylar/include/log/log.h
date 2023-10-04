@@ -1,8 +1,8 @@
 #ifndef __SYLAR_LOG_H__
 #define __SYLAR_LOG_H__
 
-#include "singleton.h"
-#include "log/util.h"
+#include "tools/singleton.h"
+#include "tools/util.h"
 #include "thread/thread.h"
 #include <string>
 #include <stdint.h>
@@ -14,11 +14,11 @@
 #include <time.h>
 #include <stdarg.h>
 
-#define SYLAR_LOG_LEVEL(logger, level)                                                                 \
-    if (logger->getLevel() <= level)                                                                   \
-    sylar::LogEventWrap(std::make_shared<sylar::LogEvent>(logger, level,                               \
-                                                          __FILE__, __LINE__, 0, sylar::GetThreadId(), \
-                                                          sylar::GetFiberId(), time(0)))               \
+#define SYLAR_LOG_LEVEL(logger, level)                                                                             \
+    if (logger->getLevel() <= level)                                                                               \
+    sylar::LogEventWrap(std::make_shared<sylar::LogEvent>(logger, level,                                           \
+                                                          __FILE__, __LINE__, 0, sylar::GetThreadId(),             \
+                                                          sylar::GetFiberId(), time(0), sylar::Thread::GetName())) \
         .getSS()
 
 #define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::DEBUG)
@@ -27,12 +27,12 @@
 #define SYLAR_LOG_ERROR(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::ERROR)
 #define SYLAR_LOG_FATAL(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::FATAL)
 
-#define SYLAR_LOG_FMT_LEVEL(logger, level, fmt, ...)                                                   \
-    if (logger->getLevel() <= level)                                                                   \
-    sylar::LogEventWrap(std::make_shared<sylar::LogEvent>(logger, level,                               \
-                                                          __FILE__, __LINE__, 0, sylar::GetThreadId(), \
-                                                          sylar::GetFiberId(), time(0)))               \
-        .getEvent()                                                                                    \
+#define SYLAR_LOG_FMT_LEVEL(logger, level, fmt, ...)                                                               \
+    if (logger->getLevel() <= level)                                                                               \
+    sylar::LogEventWrap(std::make_shared<sylar::LogEvent>(logger, level,                                           \
+                                                          __FILE__, __LINE__, 0, sylar::GetThreadId(),             \
+                                                          sylar::GetFiberId(), time(0), sylar::Thread::GetName())) \
+        .getEvent()                                                                                                \
         ->format(fmt, __VA_ARGS__)
 
 #define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::DEBUG, fmt, __VA_ARGS__)
@@ -75,7 +75,8 @@ namespace sylar
         typedef std::shared_ptr<LogEvent> ptr;
         LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level,
                  const char *file, int32_t line, uint32_t elapse,
-                 uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+                 uint32_t thread_id, uint32_t fiber_id, uint64_t time,
+                 const std::string &thread_name);
 
         const char *getFile() const { return m_file; }
         uint32_t getLine() const { return m_line; }
@@ -83,6 +84,7 @@ namespace sylar
         uint32_t getTreadId() const { return m_threadId; }
         uint32_t getFiberId() const { return m_fiberId; }
         uint32_t getTime() const { return m_time; }
+        const std::string &getThreadName() const { return m_threadName; }
         std::string getContent() const { return m_ss.str(); }
         std::stringstream &getSS() { return m_ss; }
         std::shared_ptr<Logger> getLogger() const { return m_logger; }
@@ -97,6 +99,7 @@ namespace sylar
         uint32_t m_threadId = 0;      // 线程id
         uint32_t m_fiberId = 0;       // 协程id
         uint64_t m_time;              // 时间戳
+        std::string m_threadName;     // 线程名称
         std::stringstream m_ss;
 
         std::shared_ptr<Logger> m_logger; // 日志器
@@ -352,6 +355,16 @@ namespace sylar
         void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override
         {
             os << "\t";
+        }
+    };
+
+    class ThreadNameFormatItem : public LogFormatter::FormatItem
+    {
+    public:
+        ThreadNameFormatItem(const std::string &str = "") {}
+        void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override
+        {
+            os << event->getThreadName();
         }
     };
 

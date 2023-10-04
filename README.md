@@ -192,6 +192,19 @@ logs:
 
 ## 协程库封装
 
+定义协程接口：
+使用`ucontext_t`实现
+
+定义宏:
+重新定义`assert`
+只能主协程创建子协程，不可以子协程再进程创建协程
+
+    Tread->main_fiber  <--------> sub_fiber
+                ^
+                |
+                V
+            sub_fiber
+
 ## socket函数库
 
 ## http协议开发

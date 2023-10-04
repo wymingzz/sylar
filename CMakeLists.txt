@@ -14,10 +14,11 @@ find_library(YAMLCPP libyaml-cpp.a)
 message("***", ${YAMLCPP})
 
 set(LIB_SRC
-    sylar/log/log.cc
-    sylar/log/util.cc
     sylar/config/config.cc
+    sylar/thread/fiber.cc
+    sylar/log/log.cc
     sylar/thread/thread.cc
+    sylar/tools/util.cc
     )
 
 add_library(sylar SHARED ${LIB_SRC})
@@ -45,6 +46,16 @@ add_executable(test_thread tests/test_thread.cc)
 add_dependencies(test_thread sylar)
 force_redefine_file_macro_for_sources(test_thread)
 target_link_libraries(test_thread ${LIB_LIB})
+
+add_executable(test_util tests/test_util.cc)
+add_dependencies(test_util sylar)
+force_redefine_file_macro_for_sources(test_util)
+target_link_libraries(test_util ${LIB_LIB})
+
+add_executable(test_fiber tests/test_fiber.cc)
+add_dependencies(test_fiber sylar)
+force_redefine_file_macro_for_sources(test_fiber)
+target_link_libraries(test_fiber ${LIB_LIB})
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
