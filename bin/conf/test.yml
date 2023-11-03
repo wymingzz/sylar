@@ -1,0 +1,85 @@
+
+logs:
+  - name: root
+    level: info
+    formatter: '%d\t%m%n'
+    appenders:
+      - type: FileLogAppender
+        path: log.txt
+      - type: StdoutLogAppender
+  - name: system
+    level: debug
+    formatter: '%d\t%m%n'
+    appenders:
+      - type: FileLogAppender
+        path: log.txt
+      - type: StdoutLogAppender
+
+system:
+  port: 9900
+  value: 15
+  int_vec:
+    - 10
+    - 20
+  int_list: [100, 200, 500]
+  int_set: [2, 5, 3, 5]
+  int_uset: [20, 50, 30, 50]
+  str_int_map:
+    c: 3
+    d: 4
+    e: 5
+  str_int_umap:
+    x: 1
+    y: 2
+    z: 3
+
+class:
+  person:
+    name: "name"
+    age: 18
+    sex: true
+
+  person_map:
+    name:
+      name: "first"
+      age: 30
+      sex: false
+    sylar:
+      name: "second"
+      age: 50
+      sex: true
+    cj:
+      name: "cj"
+      age: 18
+      sex: true
+  person_map_vec:
+    name:
+      - name: "first"
+        age: 1
+        sex: false
+      - name: "second"
+        age: 2
+        sex: true
+      - name: "third"
+        age: 3
+        sex: true
+    sylar:
+      - name: "sylar01"
+        age: 30
+        sex: true
+      - name: "sylar02"
+        age: 31
+        sex: false
+      - name: "sylar03"
+        age: 32
+        sex: false
+  person_vec:
+    - name: "vec first"
+      age: 1
+      sex: false
+    - name: "vec second"
+      age: 2
+      sex: true
+    - name: "vec third"
+      age: 3
+      sex: true

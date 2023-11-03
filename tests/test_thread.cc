@@ -39,7 +39,7 @@ void fun3()
 int main(int argc, char const *argv[])
 {
     SYLAR_LOG_INFO(g_logger) << "thread test begin";
-    YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/log2.yml");
+    YAML::Node root = YAML::LoadFile("/home/wyming/Documents/C++/sylar/bin/conf/log2.yml");
     sylar::Config::LoadFromYaml(root);
 
     std::vector<sylar::Thread::ptr> thrs;

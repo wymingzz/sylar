@@ -57,7 +57,7 @@ void print_yaml(const YAML::Node &node, int level)
 
 void test_yaml()
 {
-    YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/test.yml");
+    YAML::Node root = YAML::LoadFile("/home/wyming/Documents/C++/sylar/bin/conf/test.yml");
     print_yaml(root, 0);
 
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root;
@@ -94,7 +94,7 @@ void test_config()
     XX_M(g_str_int_map_value_config, str_int_map, before);
     XX_M(g_str_int_umap_value_config, str_int_umap, before);
 
-    YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/test.yml");
+    YAML::Node root = YAML::LoadFile("/home/wyming/Documents/C++/sylar/bin/conf/test.yml");
     sylar::Config::LoadFromYaml(root);
 
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_int_value_config->getValue();
@@ -211,7 +211,7 @@ void test_class()
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_person_map_vec->toString()
                                      << " - " << g_person_map_vec->getValue().size();
 
-    YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/test.yml");
+    YAML::Node root = YAML::LoadFile("/home/wyming/Documents/C++/sylar/bin/conf/test.yml");
     sylar::Config::LoadFromYaml(root);
 
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
@@ -230,7 +230,7 @@ void test_log()
     static sylar::Logger::ptr system_log = SYLAR_LOG_NAME("system");
     SYLAR_LOG_INFO(system_log) << "hello system" << std::endl;
     // std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
-    YAML::Node root = YAML::LoadFile("/home/wyming/文档/C++/sylar/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/wyming/Documents/C++/sylar/bin/conf/log.yml");
     sylar::Config::LoadFromYaml(root);
     std::cout << "===========================================\n";
     std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
