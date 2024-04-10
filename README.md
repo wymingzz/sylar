@@ -18,7 +18,7 @@ CMakeLists.txt -- cmake的定义文件
 
 lib -- 库的输出路径
 
-sylar -- 源代码路径
+src -- 源代码路径
 
 tests -- 测试代码路径
 
