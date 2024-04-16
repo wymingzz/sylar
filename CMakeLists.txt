@@ -6,7 +6,7 @@ include(cmake/utils.cmake)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -ggdb -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
 
-include_directories(${PROJECT_SOURCE_DIR}/sylar/include)
+include_directories(${PROJECT_SOURCE_DIR}/src/include)
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 
@@ -14,11 +14,11 @@ find_library(YAMLCPP libyaml-cpp.a)
 message("***", ${YAMLCPP})
 
 set(LIB_SRC
-    sylar/config/config.cc
-    sylar/thread/fiber.cc
-    sylar/log/log.cc
-    sylar/thread/thread.cc
-    sylar/tools/util.cc
+    src/config/config.cc
+    src/thread/fiber.cc
+    src/log/log.cc
+    src/thread/thread.cc
+    src/tools/util.cc
     )
 
 add_library(sylar SHARED ${LIB_SRC})
